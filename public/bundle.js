@@ -25427,24 +25427,19 @@
 	var React = __webpack_require__(1);
 	var Nav = __webpack_require__(223);
 
-	var Main = React.createClass({
-	  displayName: 'Main',
-
-	  render: function render() {
+	var Main = function Main(props) {
 	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(Nav, null),
-	      React.createElement(
-	        'h2',
+	        'div',
 	        null,
-	        'Main Component'
-	      ),
-	      this.props.children
+	        React.createElement(Nav, null),
+	        React.createElement(
+	            'h2',
+	            null,
+	            'Main Component'
+	        ),
+	        props.children
 	    );
-	  }
-	});
-
+	};
 	module.exports = Main;
 
 /***/ },
@@ -25459,37 +25454,32 @@
 	    Link = _require.Link,
 	    IndexLink = _require.IndexLink;
 
-	var Nav = React.createClass({
-	  displayName: 'Nav',
-
-	  render: function render() {
+	var Nav = function Nav(props) {
 	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
+	        'div',
 	        null,
-	        'Nav Component'
-	      ),
-	      React.createElement(
-	        IndexLink,
-	        { to: '/', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
-	        'Get Weather'
-	      ),
-	      React.createElement(
-	        Link,
-	        { to: '/about', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
-	        'About'
-	      ),
-	      React.createElement(
-	        Link,
-	        { to: '/examples', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
-	        'Examples'
-	      )
+	        React.createElement(
+	            'h2',
+	            null,
+	            'Nav Component'
+	        ),
+	        React.createElement(
+	            IndexLink,
+	            { to: '/', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
+	            'Get Weather'
+	        ),
+	        React.createElement(
+	            Link,
+	            { to: '/about', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
+	            'About'
+	        ),
+	        React.createElement(
+	            Link,
+	            { to: '/examples', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
+	            'Examples'
+	        )
 	    );
-	  }
-	});
-
+	};
 	module.exports = Nav;
 
 /***/ },
@@ -25508,28 +25498,40 @@
 
 	    getInitialState: function getInitialState() {
 	        return {
-	            location: 'Delhi',
-	            temp: 55
+	            isLoading: false
 	        };
 	    },
 	    handleSearch: function handleSearch(location) {
 	        var that = this;
-
+	        this.setState({ isLoading: true });
 	        openWeatherMap.getTemp(location).then(function (temp) {
 	            that.setState({
 	                location: location,
-	                temp: temp
+	                temp: temp,
+	                isLoading: false
 	            });
 	        }, function (errorMessage) {
+	            that.setState({ isLoading: false });
 	            alert(errorMessage);
 	        });
 	    },
 	    render: function render() {
-	        var _state = this.state,
-	            temp = _state.temp,
-	            location = _state.location;
+	        var _setState = this.setState,
+	            isLoading = _setState.isLoading,
+	            temp = _setState.temp,
+	            location = _setState.location;
 
-
+	        function renderMessage() {
+	            if (isLoading) {
+	                return React.createElement(
+	                    'h3',
+	                    null,
+	                    'Getting Weather...'
+	                );
+	            } else if (location && temp) {
+	                return React.createElement(WeatherMessage, { temp: temp, location: location });
+	            }
+	        }
 	        return React.createElement(
 	            'div',
 	            null,
@@ -25539,7 +25541,7 @@
 	                'Weather Component'
 	            ),
 	            React.createElement(WeatherForm, { onSearch: this.handleSearch }),
-	            React.createElement(WeatherMessage, { temp: temp, location: location })
+	            renderMessage()
 	        );
 	    }
 	});
@@ -25592,27 +25594,20 @@
 
 	var React = __webpack_require__(1);
 
-	var WeatherMessage = React.createClass({
-	  displayName: 'WeatherMessage',
+	var WeatherMessage = function WeatherMessage(props) {
+	  var temp = props.temp,
+	      location = props.location;
 
-	  render: function render() {
-	    var _props = this.props,
-	        temp = _props.temp,
-	        location = _props.location;
-
-
-	    return React.createElement(
-	      'h3',
-	      null,
-	      'It\'s it ',
-	      temp,
-	      ' in ',
-	      location,
-	      '.'
-	    );
-	  }
-	});
-
+	  return React.createElement(
+	    'h3',
+	    null,
+	    'It\'s it ',
+	    temp,
+	    ' in ',
+	    location,
+	    '.'
+	  );
+	};
 	module.exports = WeatherMessage;
 
 /***/ },
@@ -27139,18 +27134,13 @@
 
 	var React = __webpack_require__(1);
 
-	var About = React.createClass({
-	  displayName: 'About',
-
-	  render: function render() {
-	    return React.createElement(
-	      'h3',
-	      null,
-	      'About Component'
-	    );
-	  }
-	});
-
+	var About = function About(props) {
+	  return React.createElement(
+	    'h3',
+	    null,
+	    'About Component'
+	  );
+	};
 	module.exports = About;
 
 /***/ },
@@ -27161,17 +27151,13 @@
 
 	var React = __webpack_require__(1);
 
-	var Examples = React.createClass({
-	  displayName: 'Examples',
-
-	  render: function render() {
-	    return React.createElement(
-	      'h3',
-	      null,
-	      'Examples Component'
-	    );
-	  }
-	});
+	var Examples = function Examples(props) {
+	  return React.createElement(
+	    'h3',
+	    null,
+	    'Examples Component'
+	  );
+	};
 
 	module.exports = Examples;
 
