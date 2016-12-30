@@ -1,3 +1,3 @@
-React Weather Application
-Run npm i 
-Open the terminal and type npm start 
+React Weather Application<br/>
+Run npm i <br/>
+Open the terminal and type npm start <br/>
